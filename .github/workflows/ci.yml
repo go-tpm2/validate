@@ -1,0 +1,68 @@
+# go-tpm2/validate CI — build the eight TamaGo guest harnesses.
+#
+# validate is a HARNESS, not a library: it boots a TamaGo amd64 guest under
+# QEMU and drives a REAL TPM 2.0 (swtpm via `-device tpm-crb`/`tpm-tis`).
+# The live swtpm + QEMU round-trips cannot run in hosted CI without a
+# software-TPM + a full-system QEMU, so CI is BUILD-ONLY: it proves every
+# harness still compiles for tamago/amd64 against the published go-tpm2
+# modules. The actual PASS/FAIL proofs run locally via the run-*.sh scripts.
+#
+# TamaGo is not a stock GOOS, so we build the TamaGo toolchain from source
+# (usbarmory/tamago, the version pinned in go.mod) using a stock Go as the
+# bootstrap, then use it to cross-build the guest ELFs. There are no
+# host-side Go tests in this module.
+
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  GOWORK: off
+  TAMAGO_VERSION: "1.26.4"
+
+jobs:
+  build:
+    name: build tamago guest harnesses
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: validate
+
+      # Stock Go to bootstrap the TamaGo toolchain.
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          check-latest: true
+
+      - name: Build TamaGo toolchain from source
+        run: |
+          git clone --depth 1 --branch "v${TAMAGO_VERSION}" \
+            https://github.com/usbarmory/tamago tamago-go
+          cd tamago-go/src
+          # Bootstrap with the stock Go installed above.
+          GOROOT_BOOTSTRAP="$(go env GOROOT)" ./make.bash
+          echo "TAMAGO=${GITHUB_WORKSPACE}/tamago-go/bin/go" >> "$GITHUB_ENV"
+
+      - name: Show TamaGo version
+        run: "$TAMAGO version"
+
+      - name: Build all eight harnesses (tamago/amd64)
+        working-directory: validate
+        run: |
+          set -euo pipefail
+          for c in cmd/*/; do
+            n="$(basename "$c")"
+            echo "== building $n =="
+            GOOS=tamago GOARCH=amd64 GOOSPKG=github.com/usbarmory/tamago \
+              "$TAMAGO" build -ldflags "-T 0x10010000 -R 0x1000" \
+              -o "/tmp/${n}.elf" "./$c"
+          done
+          echo "all harnesses built"

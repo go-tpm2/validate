@@ -44,8 +44,8 @@ jobs:
 
       - name: Build TamaGo toolchain from source
         run: |
-          git clone --depth 1 --branch "v${TAMAGO_VERSION}" \
-            https://github.com/usbarmory/tamago tamago-go
+          git clone --depth 1 --branch "tamago-go${TAMAGO_VERSION}" \
+            https://github.com/usbarmory/tamago-go tamago-go
           cd tamago-go/src
           # Bootstrap with the stock Go installed above.
           GOROOT_BOOTSTRAP="$(go env GOROOT)" ./make.bash

@@ -6,5 +6,7 @@ github.com/go-tpm2/tis v0.1.0 h1:52vn7P6Qf8LdU8XnEL7fPqw2V3BYhYAFzFi28PDQ384=
 github.com/go-tpm2/tis v0.1.0/go.mod h1:jg4f0KYmxJubJge1SeoyKTRhJfVQSXHNg+IkEjSFmqA=
 github.com/go-tpm2/tpm2 v0.3.0 h1:9lZxL6OwnEp8xEVCJfdB7ZYDAlR9S2i/Zyk6nhut+Z4=
 github.com/go-tpm2/tpm2 v0.3.0/go.mod h1:ovPqrMNpQ2cBxLTb7XOoOaFr40wPYutTQgQvv8ko4Gk=
+github.com/go-tpm2/tpm2 v0.4.0 h1:tt/ZG+dClEg2cd3AM2h+ft3ysaN4yPhEA9ev86qXwvc=
+github.com/go-tpm2/tpm2 v0.4.0/go.mod h1:ovPqrMNpQ2cBxLTb7XOoOaFr40wPYutTQgQvv8ko4Gk=
 github.com/usbarmory/tamago v1.26.4 h1:laFvRANKgVYFHxLHjIlhqJCc3Xm+qMyab2SlUoNw6zY=
 github.com/usbarmory/tamago v1.26.4/go.mod h1:HZkb+ZkzFl8aCxAuF7exsKX+XaNM0mYG9Iv7ooX1WDY=

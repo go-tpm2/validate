@@ -1,13 +1,11 @@
+github.com/go-tpm2/attest v0.1.0 h1:HIAMO6Hje1vq0fdGticT1s+ziJTdP5Ck65CvaL5JwFU=
+github.com/go-tpm2/attest v0.1.0/go.mod h1:jTzQY5bvejQo+suOVtMg6On1hMGQUK4xgbMAgCboTr0=
 github.com/go-tpm2/common v0.1.0 h1:VVxswlksVMyCKE9Ra0k1m8l22YSmCk2je8KGiwtY9bs=
 github.com/go-tpm2/common v0.1.0/go.mod h1:YAn0c2kmze7OPO4Myn9FaEk/c+EayBap0dj7rnROcHs=
 github.com/go-tpm2/crb v0.1.0 h1:9Eub9w7vgLYFFPTBCInRPq7yTPMbaS2UMWN66rn/yqE=
 github.com/go-tpm2/crb v0.1.0/go.mod h1:aQ1o6ZACruxMeccwMCRct1wINkjIOuosuoNjDq9pkq0=
 github.com/go-tpm2/tis v0.1.0 h1:52vn7P6Qf8LdU8XnEL7fPqw2V3BYhYAFzFi28PDQ384=
 github.com/go-tpm2/tis v0.1.0/go.mod h1:jg4f0KYmxJubJge1SeoyKTRhJfVQSXHNg+IkEjSFmqA=
-github.com/go-tpm2/tpm2 v0.3.0 h1:9lZxL6OwnEp8xEVCJfdB7ZYDAlR9S2i/Zyk6nhut+Z4=
-github.com/go-tpm2/tpm2 v0.3.0/go.mod h1:ovPqrMNpQ2cBxLTb7XOoOaFr40wPYutTQgQvv8ko4Gk=
-github.com/go-tpm2/tpm2 v0.4.0 h1:tt/ZG+dClEg2cd3AM2h+ft3ysaN4yPhEA9ev86qXwvc=
-github.com/go-tpm2/tpm2 v0.4.0/go.mod h1:ovPqrMNpQ2cBxLTb7XOoOaFr40wPYutTQgQvv8ko4Gk=
 github.com/go-tpm2/tpm2 v0.5.0 h1:BrcTd4W2YoJb74+058HbZ9YFB+HtwDHCK8GX4qv5AxQ=
 github.com/go-tpm2/tpm2 v0.5.0/go.mod h1:ovPqrMNpQ2cBxLTb7XOoOaFr40wPYutTQgQvv8ko4Gk=
 github.com/usbarmory/tamago v1.26.4 h1:laFvRANKgVYFHxLHjIlhqJCc3Xm+qMyab2SlUoNw6zY=

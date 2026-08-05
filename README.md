@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/license-BSD--3--Clause-blue)](LICENSE)
 
 Real-hardware validation **harness** (not a library) for the go-tpm2 stack.
-**v0.5.0.** Each harness boots a
+**v0.9.0.** Each harness boots a
 [TamaGo](https://github.com/usbarmory/tamago) `amd64` guest under QEMU and
 drives a **real TPM 2.0** — QEMU's `-device tpm-crb` (or `-device tpm-tis`)
 backed by a live [`swtpm`](https://github.com/stefanberger/swtpm) **0.10.1**
@@ -24,7 +24,7 @@ behaviour — the same live round-trip discipline used in the go-virtio work.
 
 ## Harnesses
 
-Eight guest harnesses under `cmd/`, each with its `run-*.sh` wrapper:
+Eleven guest harnesses under `cmd/`, each with its `run-*.sh` wrapper:
 
 | Harness | Transport | Script | What it proves against real swtpm |
 |---|---|---|---|
@@ -36,13 +36,20 @@ Eight guest harnesses under `cmd/`, each with its `run-*.sh` wrapper:
 | `cmd/tpmcap` | CRB | `run-cap.sh` | Typed `GetCapability` decoders (PCR banks, properties, manufacturer, algorithms, handles) against live capability data |
 | `cmd/tpmek` | CRB | `run-ek.sh` | The EK Credential Profile ECC-P256 (L-2) template produces the expected EK on the live TPM |
 | `cmd/tpmcred` | CRB | `run-cred.sh` | Credential activation: an off-TPM `MakeCredential` (from EK public + AK Name) is recovered EXACTLY by `TPM2_ActivateCredential` — proving AK and EK share one TPM |
+| `cmd/attestvalidate` | CRB | `run-attest-protocol.sh` | Full `go-tpm2/attest` node-admission protocol in one guest (enroll + admit), then the negatives: bad-PCR, stale-nonce, wrong-AK all REJECTED |
+| `cmd/attesteventlog` | CRB | `run-attest-eventlog.sh` | `go-tpm2/attest`'s `EventLogPolicy`: replays a crypto-agile TCG event log of real `PCR_Extend`s and checks it equals the live swtpm PCRs and is allowlisted, then rejects an unapproved measurement and a tampered log |
+| `cmd/tpmimport` | CRB | `run-import.sh` | Object duplication: an OFFLINE `tpm2.WrapToPCR` (control-plane, no TPM) is `TPM2_Import`ed, `Load`ed, and `Unseal`ed on the live TPM ONLY while its PCRs still match |
 
 ## Run
 
 ```sh
-./run.sh            # CRB validate
-./run-tis.sh        # TIS validate
-./run-seal.sh       # … etc, one per harness above
+./run.sh                    # CRB validate
+./run-tis.sh                # TIS validate
+./run-attest.sh             # Quote + VerifyQuote
+./run-attest-protocol.sh    # full attest node-admission protocol
+./run-attest-eventlog.sh    # attest EventLogPolicy replay
+./run-import.sh             # WrapToPCR -> Import -> Unseal
+./run-seal.sh               # … etc, one per harness above
 ```
 
 Each script requires `swtpm` (`/opt/homebrew/bin/swtpm`),
@@ -106,11 +113,14 @@ tpm-crb|tpm-tis,tpmdev=…`, and uses fresh swtpm state + sockets every run.
 
 ## The go-tpm2 stack
 
-This harness validates the four library repos:
+This harness validates five library repos:
 [`common`](https://github.com/go-tpm2/common),
 [`crb`](https://github.com/go-tpm2/crb),
-[`tis`](https://github.com/go-tpm2/tis), and
-[`tpm2`](https://github.com/go-tpm2/tpm2).
+[`tis`](https://github.com/go-tpm2/tis),
+[`tpm2`](https://github.com/go-tpm2/tpm2) (the base CRB/TIS/PCR/seal/NV/EK/
+credential/import cycles above), and
+[`attest`](https://github.com/go-tpm2/attest) (the node-admission protocol and
+event-log replay policy, via `cmd/attestvalidate` and `cmd/attesteventlog`).
 
 ## Specifications
 

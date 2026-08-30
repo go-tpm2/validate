@@ -37,7 +37,7 @@ jobs:
           path: validate
 
       # Stock Go to bootstrap the TamaGo toolchain.
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version: stable
           check-latest: true

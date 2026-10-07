@@ -38,7 +38,7 @@ jobs:
       # Stock Go to bootstrap the TamaGo toolchain.
       - uses: actions/setup-go@v7
         with:
-          go-version: stable
+          go-version: '1.27.1'
           check-latest: true
 
       # The toolchain version is READ FROM go.mod rather than pinned here.

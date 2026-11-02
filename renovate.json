@@ -1,4 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>go-tpm2/.github"]
+  "extends": ["github>go-tpm2/.github"],
+  "postUpdateOptions": ["gomodUpdateImportPaths"],
+  "packageRules": [
+    {
+      "description": [
+        "guest/ is a nested Go module (go-tpm2/validate#4): its tamago imports only compile for GOOS=tamago, so the organisation's gomodTidy post-update step, run on a host, would strip the go.sum entries the guest build needs. postUpdateOptions above therefore drops gomodTidy for this repository; CI checks tidiness with the tamago toolchain instead."
+      ],
+      "matchFileNames": ["guest/**"],
+      "groupName": "guest dependencies",
+      "groupSlug": "guest-deps"
+    }
+  ]
 }

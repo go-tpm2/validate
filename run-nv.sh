@@ -23,7 +23,7 @@ SOCK="/tmp/tpmnv_swtpm.sock"
 CPU="${CPU:-max}"
 
 echo "== build =="
-( cd "$HERE" && GOWORK=off GOOS=tamago GOARCH=amd64 \
+( cd "$HERE/guest" && GOWORK=off GOOS=tamago GOARCH=amd64 \
   GOOSPKG=github.com/usbarmory/tamago \
   "$TAMAGO" build -ldflags "-T 0x10010000 -R 0x1000" -o "$ELF" ./cmd/tpmnv ) || exit 1
 

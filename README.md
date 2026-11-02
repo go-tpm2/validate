@@ -24,7 +24,14 @@ behaviour — the same live round-trip discipline used in the go-virtio work.
 
 ## Harnesses
 
-Eleven guest harnesses under `cmd/`, each with its `run-*.sh` wrapper:
+Eleven guest harnesses under `guest/cmd/`, each with its `run-*.sh` wrapper
+(paths in the table are relative to `guest/`). `guest/` is the repository's
+only Go module, nested on purpose: its `github.com/usbarmory/tamago` imports
+only compile for `GOOS=tamago`, so a host `go mod tidy` at the root used to
+strip the tamago `go.sum` entries the guest build needs (#4). Tidy it only
+with a tamago toolchain
+(`GOOS=tamago GOARCH=amd64 GOOSPKG=github.com/usbarmory/tamago go mod tidy`);
+CI checks that:
 
 | Harness | Transport | Script | What it proves against real swtpm |
 |---|---|---|---|
@@ -57,7 +64,7 @@ Each script requires `swtpm` (`/opt/homebrew/bin/swtpm`),
 guest is built with:
 
 ```sh
-GOWORK=off GOOS=tamago GOARCH=amd64 GOOSPKG=github.com/usbarmory/tamago \
+cd guest && GOWORK=off GOOS=tamago GOARCH=amd64 GOOSPKG=github.com/usbarmory/tamago \
   "$TAMAGO" build -ldflags "-T 0x10010000 -R 0x1000" \
   -o tpmvalidate.elf ./cmd/tpmvalidate
 ```

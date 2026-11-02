@@ -22,8 +22,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/go-tpm2/validate/board"
-	"github.com/go-tpm2/validate/regs"
+	"github.com/go-tpm2/validate/guest/board"
+	"github.com/go-tpm2/validate/guest/regs"
 
 	"github.com/go-tpm2/common"
 	"github.com/go-tpm2/crb"

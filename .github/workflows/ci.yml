@@ -56,7 +56,7 @@ jobs:
       # download, no network, and no regex over a file whose `require` block
       # can be written two ways.
       - name: Resolve the TamaGo version from go.mod
-        working-directory: validate
+        working-directory: validate/guest
         run: |
           set -euo pipefail
           v=$(go mod edit -json \
@@ -80,8 +80,20 @@ jobs:
       - name: Show TamaGo version
         run: "$TAMAGO version"
 
+      # guest/ is the repository's only module and is nested so a host
+      # `go mod tidy` never sees the tamago imports (go-tpm2/validate#4). Its
+      # go.sum can only be tidied with the tamago toolchain, so tidiness is
+      # checked here: a sweep that tidied on a host, or a bump that left stale
+      # sums, fails this step instead of the build naming a package.
+      - name: guest go.mod/go.sum are tidy (tamago toolchain)
+        working-directory: validate/guest
+        run: |
+          set -euo pipefail
+          GOOS=tamago GOARCH=amd64 GOOSPKG=github.com/usbarmory/tamago "$TAMAGO" mod tidy
+          git diff --exit-code -- go.mod go.sum
+
       - name: Build all eight harnesses (tamago/amd64)
-        working-directory: validate
+        working-directory: validate/guest
         run: |
           set -euo pipefail
           for c in cmd/*/; do
